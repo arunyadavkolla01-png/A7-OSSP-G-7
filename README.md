@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Multi-User Linux Shell
 
 A simplified Linux shell that provides username/password
@@ -43,3 +44,6 @@ MultiUserShell/
 ├── tests/
 ├── screenshots/
 └── bin/
+=======
+# A7-OSSP-G-7
+>>>>>>> de58dab34a60a30df67639c99c2df174c7933f81
