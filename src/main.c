@@ -5,19 +5,17 @@
 #include "../include/shell.h"
 #include "../include/auth.h"
 #include "../include/input.h"
-
+#include "../include/parser.h"
+#include "../include/process.h"
+#include "../include/builtin.h"
 
 int main()
 {
     char username[MAX_USERNAME];
-    char *command;
+    char *line;
+    char **tokens;
 
-    /*
-     * ================================
-     * USER AUTHENTICATION
-     * ================================
-     */
-
+    /* Authentication */
     if (!authenticate_user(username))
     {
         printf("\n=====================================\n");
@@ -25,102 +23,48 @@ int main()
         printf("=====================================\n");
 
         printf("\nInvalid username or password.\n");
-        printf("Exiting Multi-User Linux Shell...\n");
+        printf("Exiting MultiUserShell...\n");
 
         return 1;
     }
 
-
-    /*
-     * ================================
-     * LOGIN SUCCESSFUL
-     * ================================
-     */
-
+    /* Login successful */
     printf("\n=====================================\n");
     printf("       LOGIN SUCCESSFUL\n");
     printf("=====================================\n");
 
     printf("\nWelcome, %s!\n", username);
 
-
-    /*
-     * ================================
-     * START SHELL
-     * ================================
-     */
-
     printf("\n=====================================\n");
     printf(" %s Version %s\n", SHELL_NAME, VERSION);
     printf("=====================================\n");
 
-
-    /*
-     * ================================
-     * REPL LOOP
-     * ================================
-     *
-     * READ
-     * EVALUATE
-     * PRINT
-     * LOOP
-     */
-
+    /* Shell REPL */
     while (1)
     {
-        /*
-         * Display user-specific prompt.
-         */
         printf("\n%s@MultiUserShell> ", username);
 
-        /*
-         * Read command using dynamic memory.
-         */
-        command = read_line();
+        line = read_line();
 
-
-        /*
-         * Check for exit.
-         */
-        if (strcmp(command, "exit") == 0)
+        /* Empty command */
+        if (strlen(line) == 0)
         {
-            free(command);
-
-            printf("\nUser %s logged out.\n", username);
-
-            break;
-        }
-
-
-        /*
-         * Ignore empty commands.
-         */
-        if (strlen(command) == 0)
-        {
-            free(command);
-
+            free(line);
             continue;
         }
 
+        /* Parse command */
+        tokens = parse_line(line);
 
-        /*
-         * Process command.
-         *
-         * Currently we display the
-         * entered command.
-         */
-        printf("Command received: %s\n", command);
+        /* Built-in or external command */
+        if (execute_builtin(tokens) == 0)
+        {
+            execute(tokens);
+        }
 
-
-        /*
-         * Release dynamically allocated
-         * memory.
-         */
-        free(command);
+        free_tokens(tokens);
+        free(line);
     }
-
-
-    printf("\nThank you for using MultiUserShell.\n");
 
     return 0;
 }
