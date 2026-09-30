@@ -1,10 +1,16 @@
 CC = gcc
-
 CFLAGS = -Wall -Wextra -g -Iinclude
 
-SRC = src/main.c src/auth.c src/input.c src/parser.c src/process.c src/builtin.c
+SRC = src/main.c \
+      src/auth.c \
+      src/input.c \
+      src/parser.c \
+      src/process.c \
+      src/builtin.c \
+      src/signals.c \
+      src/pipes.c
 
-TARGET = bin/multishell
+TARGET = bin/shellforge
 
 all: $(TARGET)
 
@@ -12,10 +18,10 @@ $(TARGET): $(SRC)
 	mkdir -p bin
 	$(CC) $(CFLAGS) $(SRC) -o $(TARGET)
 
-run:
+run: $(TARGET)
 	./$(TARGET)
 
 clean:
-	rm -rf bin/*
+	rm -f $(TARGET)
 
-rebuild: clean all
+.PHONY: all run clean
