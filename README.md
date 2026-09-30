@@ -219,31 +219,3 @@ Record the actual test results in the project's `tests/` directory.
 * Authentication security depends on how user credentials are stored and verified.
 * Command behavior depends on the underlying Linux environment and installed programs.
 
-## 12. Future Enhancements
-
-* Support multiple commands in a pipeline.
-* Implement input and output redirection.
-* Add command history and tab completion.
-* Introduce background process execution.
-* Improve job control and signal management.
-* Add automated test cases.
-* Improve authentication and credential storage.
-* Expand error handling and documentation.
-
-## 13. Team and Contributors
-
-Add the verified names of all project members, their registration details if required by your institution, and the faculty guide.
-
-* **Project Title:** Multi-User Linux Shell — ShellForge
-* **Subject:** Operating Systems and System Programming
-* **Institution:** Add your institution's official name.
-* **Team Members:** Add the verified team member names.
-* **Faculty Guide:** Add the verified faculty guide name.
-
-## 14. Conclusion
-
-ShellForge demonstrates the implementation of a basic Linux shell in C by combining command input, parsing, process creation, built-in operations, signal handling, and pipe-based inter-process communication. The project provides practical experience with Linux system calls and foundational operating system concepts.
-
-## 15. License
-
-Add the license selected for this project, if applicable. If no license has been selected, do not claim that the project is released under a particular open-source license.
