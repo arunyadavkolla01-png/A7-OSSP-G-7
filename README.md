@@ -218,4 +218,3 @@ Record the actual test results in the project's `tests/` directory.
 * Input redirection and output redirection are not included unless implemented separately.
 * Authentication security depends on how user credentials are stored and verified.
 * Command behavior depends on the underlying Linux environment and installed programs.
-
