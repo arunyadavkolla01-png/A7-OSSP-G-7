@@ -247,3 +247,39 @@ ShellForge demonstrates the implementation of a basic Linux shell in C by combin
 ## 15. License
 
 Add the license selected for this project, if applicable. If no license has been selected, do not claim that the project is released under a particular open-source license.
+
+
+## PROJECT FLOW
+
+             ShellForge
+                 │
+                 ▼
+       ┌───────────────────┐
+       │ User Authentication│
+       └─────────┬─────────┘
+                 │
+        ┌────────┴────────┐
+        │                 │
+     Failed            Successful
+        │                 │
+        ▼                 ▼
+ Access Denied      User Shell Session
+                          │
+                          ▼
+                    Read Command
+                          │
+                 ┌────────┴────────┐
+                 │                 │
+              Normal             Pipe
+                 │                 │
+                 ▼                 ▼
+             Parse Line       Execute Pipe
+                 │
+          ┌──────┴──────┐
+          │             │
+       Built-in      External
+          │             │
+          ▼             ▼
+      Execute       fork()
+                     execvp()
+                     waitpid()

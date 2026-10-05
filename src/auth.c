@@ -6,7 +6,6 @@
 
 #define USER_FILE "users/users.txt"
 
-
 int authenticate_user(char *username)
 {
     char input_username[MAX_USERNAME];
@@ -28,8 +27,7 @@ int authenticate_user(char *username)
     scanf("%49s", input_password);
 
     /*
-     * Remove remaining characters
-     * from the input buffer.
+     * Clear remaining characters from input buffer.
      */
     int ch;
 
@@ -51,8 +49,11 @@ int authenticate_user(char *username)
 
     /*
      * Read users from users.txt.
+     *
+     * The space before %49[^:] skips newline characters
+     * between multiple users.
      */
-    while (fscanf(file, "%49[^:]:%49s",
+    while (fscanf(file, " %49[^:]:%49s",
                   stored_username,
                   stored_password) == 2)
     {
