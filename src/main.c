@@ -10,6 +10,7 @@
 #include "../include/signals.h"
 #include "../include/pipes.h"
 #include "../include/redirect.h"
+#include "../include/thread.h"
 
 int main(void)
 {
@@ -18,9 +19,6 @@ int main(void)
     char *line;
     char **tokens;
 
-    /*
-     * Authenticate user
-     */
     if (authenticate_user(username) == 0)
     {
         printf("\nAuthentication failed.\n");
@@ -28,22 +26,14 @@ int main(void)
         return 1;
     }
 
-    /*
-     * Authentication successful
-     */
     printf("\n=====================================\n");
     printf("      Authentication Successful\n");
     printf("      Welcome, %s!\n", username);
     printf("=====================================\n");
 
-    /*
-     * Initialize signal handling
-     */
     initialize_signals();
+    start_monitor_thread();
 
-    /*
-     * Start shell session
-     */
     while (1)
     {
         printf("%s@ShellForge> ", username);
@@ -51,34 +41,22 @@ int main(void)
 
         line = read_line();
 
-        /*
-         * End shell on EOF
-         */
         if (line == NULL)
         {
             printf("\n");
             break;
         }
 
-        /*
-         * Ignore empty commands
-         */
         if (strlen(line) == 0)
         {
             free(line);
             continue;
         }
 
-        /*
-         * Check for pipe
-         */
         char *pipe_position = strchr(line, '|');
 
         if (pipe_position != NULL)
         {
-            /*
-             * Only one pipe is supported
-             */
             if (strchr(pipe_position + 1, '|') != NULL)
             {
                 fprintf(stderr,
@@ -88,17 +66,11 @@ int main(void)
                 continue;
             }
 
-            /*
-             * Separate the two commands
-             */
             *pipe_position = '\0';
 
             char **cmd1 = parse_line(line);
             char **cmd2 = parse_line(pipe_position + 1);
 
-            /*
-             * Validate both commands
-             */
             if (cmd1 == NULL ||
                 cmd2 == NULL ||
                 cmd1[0] == NULL ||
@@ -111,9 +83,6 @@ int main(void)
                 execute_pipe(cmd1, cmd2);
             }
 
-            /*
-             * Free pipe command memory
-             */
             free_tokens(cmd1);
             free_tokens(cmd2);
             free(line);
@@ -121,9 +90,6 @@ int main(void)
             continue;
         }
 
-        /*
-         * Parse normal command
-         */
         tokens = parse_line(line);
 
         if (tokens == NULL)
@@ -132,14 +98,6 @@ int main(void)
             continue;
         }
 
-        /*
-         * Execute command
-         *
-         * Order:
-         * 1. Built-in command
-         * 2. Redirection
-         * 3. Normal external command
-         */
         if (tokens[0] != NULL)
         {
             if (execute_builtin(tokens) == 0)
@@ -151,16 +109,10 @@ int main(void)
             }
         }
 
-        /*
-         * Free allocated memory
-         */
         free_tokens(tokens);
         free(line);
     }
 
-    /*
-     * End session
-     */
     printf("\nSession ended for user: %s\n", username);
     printf("Goodbye!\n");
 
