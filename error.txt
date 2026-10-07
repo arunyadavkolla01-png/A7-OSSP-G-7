@@ -1,0 +1,1 @@
+ls: cannot access 'wrong_file': No such file or directory

@@ -8,7 +8,8 @@ SRC = src/main.c \
       src/process.c \
       src/builtin.c \
       src/signals.c \
-      src/pipes.c
+      src/pipes.c \
+      src/redirect.c
 
 TARGET = bin/shellforge
 
@@ -18,14 +19,11 @@ $(TARGET): $(SRC)
 	mkdir -p bin
 	$(CC) $(CFLAGS) $(SRC) -o $(TARGET)
 
-asan:
-	mkdir -p bin
-	$(CC) $(CFLAGS) -fsanitize=address $(SRC) -o $(TARGET)
-
 run: $(TARGET)
 	./$(TARGET)
 
 clean:
-	rm -f $(TARGET)
+	rm -rf bin/*
 
-.PHONY: all asan run clean
+.PHONY: all run clean
+

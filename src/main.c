@@ -9,6 +9,7 @@
 #include "../include/builtin.h"
 #include "../include/signals.h"
 #include "../include/pipes.h"
+#include "../include/redirect.h"
 
 int main(void)
 {
@@ -50,6 +51,9 @@ int main(void)
 
         line = read_line();
 
+        /*
+         * End shell on EOF
+         */
         if (line == NULL)
         {
             printf("\n");
@@ -92,6 +96,9 @@ int main(void)
             char **cmd1 = parse_line(line);
             char **cmd2 = parse_line(pipe_position + 1);
 
+            /*
+             * Validate both commands
+             */
             if (cmd1 == NULL ||
                 cmd2 == NULL ||
                 cmd1[0] == NULL ||
@@ -104,6 +111,9 @@ int main(void)
                 execute_pipe(cmd1, cmd2);
             }
 
+            /*
+             * Free pipe command memory
+             */
             free_tokens(cmd1);
             free_tokens(cmd2);
             free(line);
@@ -123,20 +133,34 @@ int main(void)
         }
 
         /*
-         * Execute built-in or external command
+         * Execute command
+         *
+         * Order:
+         * 1. Built-in command
+         * 2. Redirection
+         * 3. Normal external command
          */
         if (tokens[0] != NULL)
         {
             if (execute_builtin(tokens) == 0)
             {
-                execute(tokens);
+                if (execute_redirection(tokens) == 0)
+                {
+                    execute(tokens);
+                }
             }
         }
 
+        /*
+         * Free allocated memory
+         */
         free_tokens(tokens);
         free(line);
     }
 
+    /*
+     * End session
+     */
     printf("\nSession ended for user: %s\n", username);
     printf("Goodbye!\n");
 

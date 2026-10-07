@@ -287,10 +287,17 @@ Add the license selected for this project, if applicable. If no license has been
 
 
 
-## Week 8 Features
-
 - Memory leak detection using Valgrind
 - Debugging using GDB
 - AddressSanitizer support
 - Defensive programming practices
 - Improved error handling
+
+## I/O redirection support
+
+- File descriptor management
+- Output redirection (>)
+- Input redirection (<)
+- Append redirection (>>)
+- Error redirection (2>)
+- File handling using open(), close(), and dup2()
