@@ -265,7 +265,7 @@ Add the license selected for this project, if applicable. If no license has been
      Failed            Successful
         │                 │
         ▼                 ▼
- Access Denied      User Shell Session
+    Access Denied      User Shell Session
                           │
                           ▼
                     Read Command
